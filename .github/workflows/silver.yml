@@ -2,7 +2,7 @@ name: Silver Tracker (5 Min)
 
 on:
   schedule:
-    - cron: "*/5 * * * *"
+    - cron: "*/45 * * * *"
   workflow_dispatch:
 
 permissions:
