@@ -5,6 +5,9 @@ on:
     - cron: "*/5 * * * *"
   workflow_dispatch:
 
+permissions:
+  contents: write   # required for git push
+
 jobs:
   run:
     runs-on: ubuntu-latest
@@ -12,6 +15,8 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -31,8 +36,11 @@ jobs:
 
       - name: Commit CSV
         run: |
-          git config user.name "github-actions"
-          git config user.email "github-actions@github.com"
-          git add silver_history.csv || true
-          git commit -m "Update silver history" || true
-          git push || true
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          git add silver_history.csv nifty_bt_cache.json nifty_indices_history.csv
+
+          git commit -m "Update silver history" || echo "No changes to commit"
+
+          git push
